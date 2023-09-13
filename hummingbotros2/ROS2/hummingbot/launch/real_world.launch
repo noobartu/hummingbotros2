@@ -1,0 +1,47 @@
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='joy',
+            executable='joy_node',
+            name='joy',
+            output='screen',
+            parameters=[{'dev': '/dev/input/js1'}]
+        ),
+        Node(
+            package='hummingbot',
+            executable='joystick.py',
+            name='joy_teleop',
+            output='screen'
+        ),
+        Node(
+            package='hummingbot',
+            executable='rover.py',
+            name='rover',
+            output='screen'
+        ),
+        Node(
+            package='hummingbot',
+            executable='motor_control.py',
+            name='motor_control',
+            output='screen'
+        ),
+        # Parameters
+        DeclareLaunchArgument(
+            'velocity_coef',
+            default_value='255.0',
+            description='Velocity coefficient as a double parameter'
+        ),
+        DeclareLaunchArgument(
+            'velocity_topic_left',
+            default_value='/hummingbot/left_vel',
+            description='Left velocity topic as a string parameter'
+        ),
+        DeclareLaunchArgument(
+            'velocity_topic_right',
+            default_value='/hummingbot/right_vel',
+            description='Right velocity topic as a string parameter'
+        ),
+    ])

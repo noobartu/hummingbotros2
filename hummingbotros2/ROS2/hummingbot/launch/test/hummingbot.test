@@ -1,0 +1,76 @@
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, LogInfo, LogWarn
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+from launch_testing.actions import LaunchTest
+
+def generate_launch_description():
+    return LaunchDescription([
+        # Launch the 'publisher_node.py', 'joystick.py', and 'rover.py' nodes
+        Node(
+            package='hummingbot',
+            executable='publisher_node.py',
+            name='publisher',
+            output='screen'
+        ),
+        Node(
+            package='hummingbot',
+            executable='joystick.py',
+            name='joystick',
+            output='screen'
+        ),
+        Node(
+            package='hummingbot',
+            executable='rover.py',
+            name='rover_control',
+            output='screen'
+        ),
+
+        # Parameters
+        DeclareLaunchArgument(
+            'velocity_coef',
+            default_value='4',
+            description='Velocity coefficient as a double parameter'
+        ),
+        DeclareLaunchArgument(
+            'velocity_topic_left',
+            default_value='/gazebo_hummingbot_client/left_vel',
+            description='Left velocity topic as a string parameter'
+        ),
+        DeclareLaunchArgument(
+            'velocity_topic_right',
+            default_value='/gazebo_hummingbot_client/right_vel',
+            description='Right velocity topic as a string parameter'
+        ),
+
+        # Conditional log messages for demonstration
+        LogInfo(
+            condition=IfCondition(LaunchConfiguration('velocity_coef')),
+            namespace='',
+            stdout_line='Velocity coefficient is set to: [$(var velocity_coef)]',
+        ),
+        LogWarn(
+            condition=IfCondition(LaunchConfiguration('velocity_topic_left')),
+            namespace='',
+            stdout_line='Left velocity topic is set to: [$(var velocity_topic_left)]',
+        ),
+        LogWarn(
+            condition=IfCondition(LaunchConfiguration('velocity_topic_right')),
+            namespace='',
+            stdout_line='Right velocity topic is set to: [$(var velocity_topic_right)]',
+        ),
+
+        # Launch the test node
+        LaunchTest(
+            action=LaunchTest.include_test_with_output(
+                package='hummingbot',
+                launch_file_name='test_node_launch.py',
+                output='screen'
+            ),
+            launch_timeout=LaunchConfiguration('test_timeout'),
+            additional_env={
+                'PYTHONUNBUFFERED': '1'
+            }
+        ),
+    ])

@@ -1,0 +1,66 @@
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration, FindExecutable
+from launch.launch_description_sources import AnyLaunchDescriptionSource
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        # Include the 'empty_world.launch.py' launch file from the 'gazebo_ros' package
+        IncludeLaunchDescription(
+            AnyLaunchDescriptionSource(
+                [FindExecutable('empty_world', package='gazebo_ros')],
+            ),
+            launch_arguments={
+                'world_name': LaunchConfiguration('world_name')
+            }.items(),
+        ),
+        
+        # Conditional log message to indicate when Gazebo is launched
+        LogInfo(
+            condition=IfCondition(LaunchConfiguration('world_name')),
+            namespace='',
+            stdout_line='Gazebo is launched!',
+        ),
+
+        # Launch the 'joy' node
+        Node(
+            package='joy',
+            executable='joy_node',
+            name='joy',
+            output='screen',
+            parameters=[{'dev': '/dev/input/js1'}]
+        ),
+
+        # Launch the 'joystick.py' and 'rover.py' nodes
+        Node(
+            package='hummingbot',
+            executable='joystick.py',
+            name='joy_teleop',
+            output='screen'
+        ),
+        Node(
+            package='hummingbot',
+            executable='rover.py',
+            name='rover',
+            output='screen'
+        ),
+
+        # Parameters
+        DeclareLaunchArgument(
+            'velocity_coef',
+            default_value='4',
+            description='Velocity coefficient as a double parameter'
+        ),
+        DeclareLaunchArgument(
+            'velocity_topic_left',
+            default_value='/gazebo_hummingbot_client/left_vel',
+            description='Left velocity topic as a string parameter'
+        ),
+        DeclareLaunchArgument(
+            'velocity_topic_right',
+            default_value='/gazebo_hummingbot_client/right_vel',
+            description='Right velocity topic as a string parameter'
+        ),
+    ])

@@ -1,0 +1,16 @@
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find hummingbot_plugin)/hummingbot_test.world"/>
+  </include>
+  
+  <node name="rover" pkg="hummingbot" type="rover.py"/>  
+  <!--for web socket connection-->
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+
+  <!--parameters -->
+  <param name="velocity_coef" value="4" type="double"/>
+  <!--dynamic topics-->
+  <param name="velocity_topic_left"  value="/gazebo_hummingbot_client/left_vel"  type="string"/>
+  <param name="velocity_topic_right" value="/gazebo_hummingbot_client/right_vel" type="string"/>
+  
+</launch>

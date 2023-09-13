@@ -1,0 +1,49 @@
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.substitutions import LaunchConfiguration, FindExecutable
+from launch.launch_description_sources import AnyLaunchDescriptionSource
+
+def generate_launch_description():
+    return LaunchDescription([
+        # Launch the 'rover.py' and 'motor_control.py' nodes
+        Node(
+            package='hummingbot',
+            executable='rover.py',
+            name='rover',
+            output='screen'
+        ),
+        Node(
+            package='hummingbot',
+            executable='motor_control.py',
+            name='motor_control',
+            output='screen'
+        ),
+
+        # Include the 'rosbridge_websocket.launch.py' launch file from the 'rosbridge_server' package
+        IncludeLaunchDescription(
+            AnyLaunchDescriptionSource(
+                [FindExecutable('rosbridge_websocket', package='rosbridge_server')],
+            ),
+            launch_arguments={
+                'rosbridge_websocket_package': 'rosbridge_server',
+                'rosbridge_websocket_executable': 'rosbridge_websocket',
+            }.items(),
+        ),
+
+        # Parameters
+        DeclareLaunchArgument(
+            'velocity_coef',
+            default_value='255.0',
+            description='Velocity coefficient as a double parameter'
+        ),
+        DeclareLaunchArgument(
+            'velocity_topic_left',
+            default_value='/hummingbot/left_vel',
+            description='Left velocity topic as a string parameter'
+        ),
+        DeclareLaunchArgument(
+            'velocity_topic_right',
+            default_value='/hummingbot/right_vel',
+            description='Right velocity topic as a string parameter'
+        ),
+    ])

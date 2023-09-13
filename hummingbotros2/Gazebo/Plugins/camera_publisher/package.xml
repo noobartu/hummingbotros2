@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hummingbot_plugin</name>
+  <version>0.1.0</version> <!-- Update the version number as appropriate -->
+  <description>The hummingbot_plugin package for ROS 2</description>
+
+  <!-- One maintainer tag required, multiple allowed, one person per tag -->
+  <maintainer email="humming_plugin@todo.todo">humming_plugin</maintainer>
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>TODO</license>
+
+  <!-- Url tags are optional, but multiple are allowed, one per tag -->
+  <!-- Optional attribute type can be: website, bugtracker, or repository -->
+  <!-- Example: -->
+  <!-- <url type="website">http://wiki.ros.org/hummingbot_plugin</url> -->
+
+  <!-- Author tags are optional, multiple are allowed, one per tag -->
+  <!-- Authors do not have to be maintainers, but could be -->
+  <!-- Example: -->
+  <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
+
+  <!-- The *depend tags are used to specify dependencies -->
+  <!-- Dependencies can be ROS 2 packages or system dependencies -->
+
+  <!-- Use buildtool_depend for build tool packages -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Use build_depend for packages you need at compile time -->
+  <!-- Add ROS 2 dependencies as needed -->
+  <!-- Example: <build_depend>some_ros2_package</build_depend> -->
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>ros2_dependency1</build_depend>
+  <build_depend>ros2_dependency2</build_depend>
+
+  <!-- Use exec_depend for packages you need at runtime -->
+  <!-- Add ROS 2 dependencies as needed -->
+  <!-- Example: <exec_depend>some_ros2_package</exec_depend> -->
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>ros2_dependency1</exec_depend>
+  <exec_depend>ros2_dependency2</exec_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+  </export>
+</package>
